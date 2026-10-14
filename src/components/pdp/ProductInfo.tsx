@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Star, Activity, BatteryCharging } from "lucide-react";
+import { Star, Activity, BatteryCharging, Layers, Droplets, Sparkles } from "lucide-react";
 import { Product } from "@/types";
 
 interface ProductInfoProps {
@@ -10,38 +10,68 @@ interface ProductInfoProps {
 }
 
 export default function ProductInfo({ product }: ProductInfoProps) {
-  const colors = [
-    { id: "blue", name: "Midnight Blue", hex: "#0B3CD5" },
-    { id: "black", name: "Midnight Black", hex: "#111111" },
-    { id: "white", name: "Crisp White", hex: "#FFFFFF" },
-  ];
+  const isRazor =
+    product.category === "razor" ||
+    product.name.toLowerCase().includes("razor") ||
+    product.name.toLowerCase().includes("blade");
+
+  const colors = isRazor
+    ? [
+        { id: "silver", name: "Matte Silver", hex: "#E5E7EB" },
+        { id: "black", name: "Midnight Black", hex: "#111111" },
+        { id: "gunmetal", name: "Gunmetal Blue", hex: "#1E293B" },
+      ]
+    : [
+        { id: "blue", name: "Midnight Blue", hex: "#0B3CD5" },
+        { id: "black", name: "Midnight Black", hex: "#111111" },
+        { id: "white", name: "Crisp White", hex: "#FFFFFF" },
+      ];
 
   const [selectedColor, setSelectedColor] = useState(colors[0]);
 
-  const includedItems = [
-    {
-      name: "Trimova Pro Handle",
-      image: "/images/pdp_inc_handle.png",
-    },
-    {
-      name: "Brush Head (1 attached)",
-      image: "/images/pdp_inc_head.png",
-    },
-    {
-      name: "Travel Case",
-      image: "/images/pdp_inc_case.png",
-    },
-    {
-      name: "USB-C Charging Cable",
-      image: "/images/pdp_inc_cable.png",
-    },
-  ];
+  const includedItems = isRazor
+    ? [
+        {
+          name: "Precision Razor Handle",
+          image: "/razor/pomelli_photoshoot-1.png",
+        },
+        {
+          name: "5-Blade Cartridge",
+          image: "/razor/pomelli_photoshoot-2.png",
+        },
+        {
+          name: "Magnetic Stand / Dock",
+          image: "/razor/pomelli_photoshoot-3.png",
+        },
+        {
+          name: "Travel Blade Shield",
+          image: "/razor/pomelli_photoshoot-4.png",
+        },
+      ]
+    : [
+        {
+          name: "Trimova Pro Handle",
+          image: "/brush/pomelli_photoshoot-1.png",
+        },
+        {
+          name: "Brush Head (1 attached)",
+          image: "/brush/pomelli_photoshoot-2.png",
+        },
+        {
+          name: "Travel Case",
+          image: "/brush/pomelli_photoshoot-3.png",
+        },
+        {
+          name: "USB-C Charging Cable",
+          image: "/images/pdp_inc_cable.png",
+        },
+      ];
 
   return (
     <div className="flex flex-col text-gray-900">
       {/* 1. Category Eyebrow */}
       <span className="text-xs font-semibold tracking-[0.25em] text-gray-400 uppercase mb-2">
-        {product.category || "TOOTHBRUSH"}
+        {product.category || (isRazor ? "RAZOR" : "TOOTHBRUSH")}
       </span>
 
       {/* 2. Product Title */}
@@ -98,45 +128,68 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       <div className="grid grid-cols-3 border-y border-gray-200 py-6 mb-8 text-center sm:text-left">
         {/* Col 1 */}
         <div className="flex flex-col items-center sm:items-start px-2 sm:px-4 border-r border-gray-200 first:pl-0">
-          <Activity className="w-5 h-5 text-gray-800 mb-2 stroke-[1.75]" />
+          {isRazor ? (
+            <Layers className="w-5 h-5 text-gray-800 mb-2 stroke-[1.75]" />
+          ) : (
+            <Activity className="w-5 h-5 text-gray-800 mb-2 stroke-[1.75]" />
+          )}
           <span className="text-base sm:text-lg font-bold text-gray-900 leading-tight">
-            40,000
+            {isRazor ? "5 Blades" : "40,000"}
           </span>
           <span className="text-[11px] sm:text-xs text-gray-500 leading-tight mt-1">
-            sonic movements <br className="hidden sm:inline" />per minute
+            {isRazor ? (
+              <>Swedish diamond <br className="hidden sm:inline" />steel</>
+            ) : (
+              <>sonic movements <br className="hidden sm:inline" />per minute</>
+            )}
           </span>
         </div>
 
         {/* Col 2 */}
         <div className="flex flex-col items-center sm:items-start px-2 sm:px-4 border-r border-gray-200">
-          {/* Custom clean tooth SVG icon */}
-          <svg
-            className="w-5 h-5 text-gray-800 mb-2 stroke-[1.75]"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M4.5 9.5C3.5 13 4 17 6.5 19.5c1.5 1.5 3 1.5 4-0.5l1.5-3 1.5 3c1 2 2.5 2 4 0.5 2.5-2.5 3-6.5 2-10-1-3.5-3.5-5.5-7.5-5.5s-6.5 2-7.5 5.5z" />
-          </svg>
+          {isRazor ? (
+            <Droplets className="w-5 h-5 text-gray-800 mb-2 stroke-[1.75]" />
+          ) : (
+            <svg
+              className="w-5 h-5 text-gray-800 mb-2 stroke-[1.75]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M4.5 9.5C3.5 13 4 17 6.5 19.5c1.5 1.5 3 1.5 4-0.5l1.5-3 1.5 3c1 2 2.5 2 4 0.5 2.5-2.5 3-6.5 2-10-1-3.5-3.5-5.5-7.5-5.5s-6.5 2-7.5 5.5z" />
+            </svg>
+          )}
           <span className="text-base sm:text-lg font-bold text-gray-900 leading-tight">
-            5
+            {isRazor ? "Aloe & Vit E" : "5"}
           </span>
           <span className="text-[11px] sm:text-xs text-gray-500 leading-tight mt-1">
-            cleaning <br className="hidden sm:inline" />modes
+            {isRazor ? (
+              <>comfort glide <br className="hidden sm:inline" />strip</>
+            ) : (
+              <>cleaning <br className="hidden sm:inline" />modes</>
+            )}
           </span>
         </div>
 
         {/* Col 3 */}
         <div className="flex flex-col items-center sm:items-start px-2 sm:px-4 last:pr-0">
-          <BatteryCharging className="w-5 h-5 text-gray-800 mb-2 stroke-[1.75]" />
+          {isRazor ? (
+            <Sparkles className="w-5 h-5 text-gray-800 mb-2 stroke-[1.75]" />
+          ) : (
+            <BatteryCharging className="w-5 h-5 text-gray-800 mb-2 stroke-[1.75]" />
+          )}
           <span className="text-base sm:text-lg font-bold text-gray-900 leading-tight">
-            Up to 30 days
+            {isRazor ? "Weighted" : "Up to 30 days"}
           </span>
           <span className="text-[11px] sm:text-xs text-gray-500 leading-tight mt-1">
-            battery <br className="hidden sm:inline" />life
+            {isRazor ? (
+              <>aircraft-grade <br className="hidden sm:inline" />aluminum core</>
+            ) : (
+              <>battery <br className="hidden sm:inline" />life</>
+            )}
           </span>
         </div>
       </div>

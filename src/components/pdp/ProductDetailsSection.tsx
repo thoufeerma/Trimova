@@ -1,10 +1,23 @@
 "use client";
 
 import React from "react";
-import { Activity, BatteryCharging, Droplets } from "lucide-react";
+import { Activity, BatteryCharging, Droplets, Layers, Sparkles, HeartHandshake, ShieldCheck } from "lucide-react";
 
-export default function ProductDetailsSection() {
-  const pillars = [
+interface ProductDetailsSectionProps {
+  category?: string;
+  productName?: string;
+}
+
+export default function ProductDetailsSection({
+  category = "toothbrush",
+  productName = "Trimova Pro",
+}: ProductDetailsSectionProps) {
+  const isRazor =
+    category === "razor" ||
+    productName.toLowerCase().includes("razor") ||
+    productName.toLowerCase().includes("blade");
+
+  const toothbrushPillars = [
     {
       icon: <Activity className="w-6 h-6 text-[#0B3CD5] stroke-[2]" />,
       title: "Powerful Sonic Cleaning",
@@ -38,6 +51,31 @@ export default function ProductDetailsSection() {
     },
   ];
 
+  const razorPillars = [
+    {
+      icon: <Layers className="w-6 h-6 text-[#0B3CD5] stroke-[2]" />,
+      title: "5-Blade Precision",
+      desc: "Diamond-coated Swedish steel blades engineered for micron-level closeness.",
+    },
+    {
+      icon: <Droplets className="w-6 h-6 text-[#0B3CD5] stroke-[2]" />,
+      title: "Smooth Glide Strip",
+      desc: "Aloe & Vitamin E lubricating comfort strip shields skin from friction.",
+    },
+    {
+      icon: <HeartHandshake className="w-6 h-6 text-[#0B3CD5] stroke-[2]" />,
+      title: "Ergonomic Balance",
+      desc: "Aircraft-grade aluminum handle with textured grip provides effortless control.",
+    },
+    {
+      icon: <ShieldCheck className="w-6 h-6 text-[#0B3CD5] stroke-[2]" />,
+      title: "Precision Edger",
+      desc: "Integrated back blade for clean, sharp lines on sideburns and contours.",
+    },
+  ];
+
+  const pillars = isRazor ? razorPillars : toothbrushPillars;
+
   return (
     <section className="w-full border-t border-gray-200 pt-16 sm:pt-20 mt-16 sm:mt-24 pb-12">
       {/* 1. Category Eyebrow */}
@@ -49,14 +87,25 @@ export default function ProductDetailsSection() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-16 sm:mb-20">
         <div className="lg:col-span-6">
           <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold text-gray-900 leading-[1.15] tracking-tight">
-            Designed for <br />
-            a cleaner, healthier you.
+            {isRazor ? (
+              <>
+                Crafted for <br />
+                the closest, smoothest shave.
+              </>
+            ) : (
+              <>
+                Designed for <br />
+                a cleaner, healthier you.
+              </>
+            )}
           </h2>
         </div>
 
         <div className="lg:col-span-6">
           <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-xl">
-            Trimova Pro is an advanced electric toothbrush designed to remove plaque, care for your gums and give you a noticeably cleaner, fresher smile. With multiple cleaning modes and a long-lasting battery, it fits seamlessly into your everyday routine.
+            {isRazor
+              ? `${productName} combines 5 diamond-coated Swedish steel blades with a weighted aluminum core and nourishing aloe glide strip for an effortless, irritation-free shave every time.`
+              : `${productName} is an advanced electric toothbrush designed to remove plaque, care for your gums and give you a noticeably cleaner, fresher smile with long-lasting battery performance.`}
           </p>
         </div>
       </div>

@@ -1,76 +1,85 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Play } from "lucide-react";
-import { useCart } from "@/context/CartContext";
 
 interface ProductGalleryProps {
   productName?: string;
+  category?: string;
   mainImage?: string;
+  gallery?: string[];
 }
+
+const BRUSH_GALLERY = [
+  "/brush/pomelli_photoshoot-1.png",
+  "/brush/pomelli_photoshoot-2.png",
+  "/brush/pomelli_photoshoot-3.png",
+];
+
+const RAZOR_GALLERY = [
+  "/razor/pomelli_photoshoot-1.png",
+  "/razor/pomelli_photoshoot-2.png",
+  "/razor/pomelli_photoshoot-3.png",
+  "/razor/pomelli_photoshoot-4.png",
+];
 
 export default function ProductGallery({
   productName = "Trimova Pro",
+  category,
   mainImage,
+  gallery,
 }: ProductGalleryProps) {
-  const { setIsVideoOpen } = useCart();
-  const [activeThumb, setActiveThumb] = useState(0);
+  const isRazor =
+    category === "razor" ||
+    productName.toLowerCase().includes("razor") ||
+    productName.toLowerCase().includes("blade");
 
-  const images = [
-    {
-      id: 0,
-      src: mainImage || "/images/pdp_main_display.png",
-      alt: `${productName} showcase`,
-    },
-    { id: 1, src: "/images/pdp_thumb_2.png", alt: "Close-up macro of dense DuPont bristles" },
-    { id: 2, src: "/images/pdp_thumb_3.png", alt: "Trimova Pro handle showing 5 sonic cleaning modes" },
-    { id: 3, src: "/images/pdp_thumb_4.png", alt: "Trimova Pro with sleek matte black travel case" },
-    { id: 4, src: "/images/pdp_thumb_5.png", alt: "Watch Trimova Pro cinematic film", isVideo: true },
-  ];
+  const defaultList = isRazor ? RAZOR_GALLERY : BRUSH_GALLERY;
+  const imageList = gallery && gallery.length > 0 ? gallery : defaultList;
 
-  const handleThumbClick = (index: number) => {
-    if (images[index].isVideo) {
-      setIsVideoOpen(true);
-      return;
+  // Determine starting active thumbnail
+  const initialIndex = mainImage ? imageList.findIndex((src) => src === mainImage) : 0;
+  const [activeThumb, setActiveThumb] = useState(initialIndex >= 0 ? initialIndex : 0);
+
+  // Sync active thumbnail when mainImage, category, or gallery changes
+  useEffect(() => {
+    if (mainImage) {
+      const idx = imageList.findIndex((src) => src === mainImage);
+      if (idx >= 0) {
+        setActiveThumb(idx);
+        return;
+      }
     }
-    setActiveThumb(index);
-  };
+    setActiveThumb(0);
+  }, [mainImage, category, gallery]);
+
+  const activeSrc = imageList[activeThumb] || imageList[0] || "/brush/pomelli_photoshoot-1.png";
 
   return (
     <div className="flex flex-col-reverse lg:flex-row gap-4 sm:gap-6 w-full">
-      {/* 1. Vertical Thumbnail Strip (5 items on left) */}
+      {/* 1. Vertical Thumbnail Strip (left on desktop, horizontal scroll on mobile) */}
       <div className="flex lg:flex-col gap-3 sm:gap-3.5 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 scrollbar-none shrink-0">
-        {images.map((item, idx) => {
-          const isSelected = activeThumb === idx && !item.isVideo;
+        {imageList.map((imgSrc, idx) => {
+          const isSelected = activeThumb === idx;
           return (
             <button
-              key={item.id}
+              key={`${imgSrc}-${idx}`}
               type="button"
-              onClick={() => handleThumbClick(idx)}
+              onClick={() => setActiveThumb(idx)}
               className={`relative w-16 h-16 sm:w-20 sm:h-20 lg:w-[84px] lg:h-[88px] rounded-xl overflow-hidden bg-[#F6F8FB] transition-all duration-200 cursor-pointer flex items-center justify-center border-2 ${
                 isSelected
-                  ? "border-[#0047FF] shadow-[0_0_12px_rgba(0,71,255,0.25)]"
-                  : "border-transparent hover:border-gray-300"
+                  ? "border-[#0047FF] shadow-[0_0_12px_rgba(0,71,255,0.25)] scale-[1.02]"
+                  : "border-transparent hover:border-gray-300 opacity-80 hover:opacity-100"
               }`}
-              aria-label={item.alt}
+              aria-label={`${productName} thumbnail ${idx + 1}`}
             >
               <Image
-                src={item.src}
-                alt={item.alt}
+                src={imgSrc}
+                alt={`${productName} view ${idx + 1}`}
                 fill
-                className="object-contain p-1"
+                className="object-contain p-1.5"
                 sizes="88px"
               />
-
-              {/* Play icon overlay on thumbnail 5 */}
-              {item.isVideo && (
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center transition-colors hover:bg-black/40">
-                  <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40">
-                    <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
-                  </div>
-                </div>
-              )}
             </button>
           );
         })}
@@ -79,8 +88,9 @@ export default function ProductGallery({
       {/* 2. Main Large Product Display Card */}
       <div className="relative flex-1 aspect-[4/5] sm:aspect-[1/1] lg:aspect-[4/5] bg-[#F6F8FB] rounded-2xl lg:rounded-3xl overflow-hidden border border-gray-100 flex items-center justify-center group select-none">
         <Image
-          src={images[activeThumb].src}
-          alt={images[activeThumb].alt}
+          key={activeSrc}
+          src={activeSrc}
+          alt={`${productName} showcase`}
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 50vw"

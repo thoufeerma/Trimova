@@ -9,6 +9,7 @@ export interface Product {
   rating?: number;
   reviewsCount?: number;
   image: string;
+  gallery?: string[];
   tag?: string;
   badge?: string;
   colors?: string[];

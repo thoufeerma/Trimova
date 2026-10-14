@@ -101,7 +101,7 @@ export default function RazorFeature({
 
           {/* CTA Link */}
           <Link
-            href="/toothbrushes"
+            href={`/toothbrushes/${razorProduct.id}`}
             className="inline-flex items-center gap-2 bg-[#06102B] text-white text-sm sm:text-base font-semibold px-8 py-3.5 rounded-full hover:bg-[#0047FF] hover:scale-105 active:scale-95 transition-all duration-200 shadow-xl shadow-gray-900/10 group cursor-pointer"
           >
             Explore Razors

@@ -44,10 +44,10 @@ export default function ToothbrushProductClient({ productId }: ToothbrushProduct
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
               <Link
-                href="/toothbrushes"
+                href={product.category === "razor" ? "/#razors" : "/toothbrushes"}
                 className="hover:text-gray-900 transition-colors cursor-pointer"
               >
-                Toothbrushes
+                {product.category === "razor" ? "Razors" : "Toothbrushes"}
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
               <span className="text-gray-900 font-semibold">{product.name}</span>
@@ -55,9 +55,14 @@ export default function ToothbrushProductClient({ productId }: ToothbrushProduct
 
             {/* Top Showcase: Gallery (Left) & Info (Right) */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-              {/* Left Column: Gallery with 5 Thumbnails + Large Box */}
+              {/* Left Column: Gallery Thumbnails + Large Box */}
               <div className="lg:col-span-7">
-                <ProductGallery productName={product.name} mainImage={product.image} />
+                <ProductGallery
+                  productName={product.name}
+                  category={product.category}
+                  mainImage={product.image}
+                  gallery={product.gallery}
+                />
               </div>
 
               {/* Right Column: Title, Ratings, Specs, Actions, Included items */}
@@ -67,7 +72,7 @@ export default function ToothbrushProductClient({ productId }: ToothbrushProduct
             </div>
 
             {/* Bottom Section: Product Details & 4 Feature Pillars */}
-            <ProductDetailsSection />
+            <ProductDetailsSection category={product.category} productName={product.name} />
           </div>
         </main>
 
