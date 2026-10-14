@@ -88,7 +88,7 @@ export default function SearchModal() {
                         {product.name}
                       </h4>
                       <span className="text-xs text-white/60">
-                        ₹{product.price.toLocaleString("en-IN")}
+                        {product.subtitle || (product.category === "toothbrush" ? "Sonic Toothbrush" : "Precision Razor")}
                       </span>
                     </div>
                   </div>

@@ -66,10 +66,6 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         {product.description}
       </p>
 
-      {/* 5. Price */}
-      <div className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight mb-6">
-        ₹{product.price.toLocaleString("en-IN")}
-      </div>
 
       {/* 6. Color Selection */}
       <div className="mb-8">

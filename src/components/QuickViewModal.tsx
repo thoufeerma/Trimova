@@ -59,16 +59,6 @@ export default function QuickViewModal() {
                 {selectedProduct.name}
               </h2>
 
-              <div className="flex items-baseline gap-3 mb-4">
-                <span className="text-2xl font-bold text-gray-900">
-                  ₹{selectedProduct.price.toLocaleString("en-IN")}
-                </span>
-                {selectedProduct.originalPrice && (
-                  <span className="text-sm text-gray-400 line-through">
-                    ₹{selectedProduct.originalPrice.toLocaleString("en-IN")}
-                  </span>
-                )}
-              </div>
 
               <p className="text-sm text-gray-600 leading-relaxed mb-6">
                 {selectedProduct.description}

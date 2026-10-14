@@ -62,13 +62,8 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.description}
         </p>
 
-        {/* Price & Color Swatches Row */}
-        <div className="flex items-center justify-between mt-3 mb-4">
-          <span className="text-base sm:text-lg font-bold text-gray-900 tracking-tight">
-            ₹{product.price.toLocaleString("en-IN")}
-          </span>
-
-          {/* Color Dots */}
+        {/* Color Swatches */}
+        <div className="flex items-center min-h-[24px] mt-2 mb-4">
           {product.colors && product.colors.length > 0 && (
             <div className="flex items-center gap-1.5">
               {product.colors.map((colorHex, idx) => {

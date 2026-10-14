@@ -20,7 +20,6 @@ function ToothbrushListPageContent() {
   const [filters, setFilters] = useState<FilterState>({
     productTypes: [],
     features: [],
-    maxPrice: 2999,
     selectedColor: null,
   });
 
@@ -36,7 +35,6 @@ function ToothbrushListPageContent() {
     setFilters({
       productTypes: [],
       features: [],
-      maxPrice: 2999,
       selectedColor: null,
     });
   };
@@ -85,12 +83,7 @@ function ToothbrushListPageContent() {
         if (!hasFeature) return false;
       }
 
-      // 3. Price filter
-      if (product.price > filters.maxPrice) {
-        return false;
-      }
-
-      // 4. Color filter
+      // 3. Color filter
       if (filters.selectedColor && product.colors) {
         const matchesColor = product.colors.some(
           (c) => c.toLowerCase() === filters.selectedColor?.toLowerCase()
@@ -102,11 +95,7 @@ function ToothbrushListPageContent() {
     });
 
     // Sorting logic
-    if (sortBy === "price-low") {
-      result = [...result].sort((a, b) => a.price - b.price);
-    } else if (sortBy === "price-high") {
-      result = [...result].sort((a, b) => b.price - a.price);
-    } else if (sortBy === "rating") {
+    if (sortBy === "rating") {
       result = [...result].sort((a, b) => (b.rating || 0) - (a.rating || 0));
     }
 
@@ -116,7 +105,6 @@ function ToothbrushListPageContent() {
   const activeFilterCount =
     filters.productTypes.length +
     filters.features.length +
-    (filters.maxPrice < 2999 ? 1 : 0) +
     (filters.selectedColor ? 1 : 0);
 
   return (
@@ -183,10 +171,6 @@ function ToothbrushListPageContent() {
                         <span className="font-normal text-gray-600">
                           {sortBy === "featured"
                             ? "Featured"
-                            : sortBy === "price-low"
-                            ? "Price: Low to High"
-                            : sortBy === "price-high"
-                            ? "Price: High to Low"
                             : "Highest Rated"}
                         </span>
                       </span>
@@ -207,8 +191,6 @@ function ToothbrushListPageContent() {
                         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-2xl shadow-xl z-30 py-2 text-xs sm:text-sm">
                           {[
                             { id: "featured", label: "Featured" },
-                            { id: "price-low", label: "Price: Low to High" },
-                            { id: "price-high", label: "Price: High to Low" },
                             { id: "rating", label: "Highest Rated" },
                           ].map((opt) => (
                             <button
@@ -248,7 +230,7 @@ function ToothbrushListPageContent() {
                     No matching products found
                   </p>
                   <p className="text-sm text-gray-500 max-w-sm mb-6">
-                    Try adjusting your filters or price range to find what you&apos;re looking for.
+                    Try adjusting your filters to find what you&apos;re looking for.
                   </p>
                   <button
                     onClick={handleClearAll}
