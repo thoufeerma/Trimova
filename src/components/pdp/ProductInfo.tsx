@@ -92,10 +92,26 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       </div>
 
       {/* 4. Description */}
-      <p className="text-sm sm:text-[15px] text-gray-600 leading-relaxed max-w-xl mb-6">
+      <p className="text-sm sm:text-[15px] text-gray-600 leading-relaxed max-w-xl mb-4">
         {product.description}
       </p>
 
+      {/* 5. Price Display */}
+      <div className="flex items-baseline gap-3 mb-6">
+        <span className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+          ₹{product.price.toLocaleString("en-IN")}
+        </span>
+        {product.originalPrice && (
+          <>
+            <span className="text-lg text-gray-400 line-through">
+              ₹{product.originalPrice.toLocaleString("en-IN")}
+            </span>
+            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+              Save {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+            </span>
+          </>
+        )}
+      </div>
 
       {/* 6. Color Selection */}
       <div className="mb-8">

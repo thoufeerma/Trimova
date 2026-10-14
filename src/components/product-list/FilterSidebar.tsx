@@ -6,6 +6,7 @@ import { ChevronUp, ChevronDown, Check } from "lucide-react";
 export interface FilterState {
   productTypes: string[];
   features: string[];
+  maxPrice: number;
   selectedColor: string | null;
 }
 
@@ -31,6 +32,7 @@ export default function FilterSidebar({
   const [openSections, setOpenSections] = useState({
     productType: true,
     features: true,
+    priceRange: true,
     color: true,
   });
 
@@ -75,6 +77,7 @@ export default function FilterSidebar({
   const hasActiveFilters =
     filters.productTypes.length > 0 ||
     filters.features.length > 0 ||
+    filters.maxPrice < 2999 ||
     filters.selectedColor !== null;
 
   return (
@@ -203,6 +206,51 @@ export default function FilterSidebar({
         )}
       </div>
 
+
+      {/* Accordion 3: Price Range */}
+      <div className="py-5 border-b border-gray-200">
+        <button
+          type="button"
+          onClick={() => toggleSection("priceRange")}
+          className="w-full flex items-center justify-between text-sm font-bold text-gray-900 hover:text-gray-700 transition-colors cursor-pointer"
+        >
+          <span>Price Range</span>
+          {openSections.priceRange ? (
+            <ChevronUp className="w-4 h-4 text-gray-500" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-gray-500" />
+          )}
+        </button>
+
+        {openSections.priceRange && (
+          <div className="mt-4">
+            {/* Visual Slider */}
+            <div className="relative flex items-center w-full my-4">
+              <input
+                type="range"
+                min="599"
+                max="2999"
+                step="100"
+                value={filters.maxPrice}
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    maxPrice: Number(e.target.value),
+                  }))
+                }
+                className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-900 focus:outline-none"
+              />
+            </div>
+
+            {/* Price values display */}
+            <div className="flex items-center justify-between text-xs sm:text-sm font-semibold text-gray-800">
+              <span>₹599</span>
+              <span>—</span>
+              <span>₹{filters.maxPrice.toLocaleString("en-IN")}</span>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Accordion 4: Color */}
       <div className="py-5">

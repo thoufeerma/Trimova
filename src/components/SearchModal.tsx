@@ -87,9 +87,16 @@ export default function SearchModal() {
                       <h4 className="font-semibold text-sm text-white leading-snug group-hover:text-[#6FC8FF] transition-colors">
                         {product.name}
                       </h4>
-                      <span className="text-xs text-white/60">
-                        {product.subtitle || (product.category === "toothbrush" ? "Sonic Toothbrush" : "Precision Razor")}
-                      </span>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-xs font-semibold text-white/90">
+                          ₹{product.price.toLocaleString("en-IN")}
+                        </span>
+                        {product.subtitle && (
+                          <span className="text-xs text-white/40">
+                            • {product.subtitle}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
 

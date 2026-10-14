@@ -114,8 +114,18 @@ export default function FeaturedProducts() {
                     <h3 className="font-semibold text-sm sm:text-base text-gray-900 leading-snug line-clamp-2 group-hover/title:text-[#0047FF] transition-colors">
                       {product.name}
                     </h3>
+                    <div className="flex items-center gap-2 mt-1.5">
+                      <span className="text-base sm:text-lg font-bold text-gray-900">
+                        ₹{product.price.toLocaleString("en-IN")}
+                      </span>
+                      {product.originalPrice && (
+                        <span className="text-xs text-gray-400 line-through">
+                          ₹{product.originalPrice.toLocaleString("en-IN")}
+                        </span>
+                      )}
+                    </div>
                     {product.subtitle && (
-                      <p className="text-xs text-gray-500 font-medium mt-1">
+                      <p className="text-xs text-gray-500 font-medium mt-0.5">
                         {product.subtitle}
                       </p>
                     )}
